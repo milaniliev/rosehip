@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../rosehip.css"/>
+    <script src="../rosehip.js" type="application/javascript"></script>
+    <script src="./expect.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <div id="rosehip_report"></div>
+
+    <script type="application/javascript">
+      var test_suite = new rosehip.TestSuite()
+      test_suite.reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'))
+
+      test_suite.describe("Carrot", function(test){
+        test.it("is orange", function(){
+          expect("yellow").to.equal("orange")
+        })
+
+        test.it("is a vegerable", function(){
+          expect("vegetable").to.equal("vegetable")
+        })
+      })
+
+      test_suite.run()
+    </script>
+  </body>
+</html>

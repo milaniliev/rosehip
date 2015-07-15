@@ -1,0 +1,6 @@
+{
+  "name": "rosehip_module_test",
+  "dependencies": {
+    "browserify": "^10.2.6"
+  }
+}

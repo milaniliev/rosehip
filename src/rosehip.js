@@ -1,5 +1,7 @@
 let EventEmitter = require('eventemitter2').EventEmitter2
 
+// let style = require('./rosehip.css')
+
 let Test =  class extends EventEmitter {
   constructor(text){
     super()
@@ -37,6 +39,31 @@ module.exports = {
 
     failure (options){
       console.log(options.name, "failed:", options.error)
+    }
+  },
+
+  WebReporter: class {
+    constructor (element) {
+      this.element = element
+      this.element.classList.add('rosehip')
+    }
+
+    success (options) {
+      let indicator = document.createElement('test_indicator')
+      indicator.classList.add('success')
+      indicator.innerHTML = `<status>PASS</status> <test_name>${options.name}</test_name>`
+
+      this.element.appendChild(indicator)
+    }
+
+    failure (options){
+      let indicator = document.createElement('test_indicator')
+      indicator.classList.add('failure')
+      indicator.innerHTML = `<status>FAIL</status> <test_name>${options.name}</test_name>
+        <stack_trace>${options.error.stack.replace(/\n/g,'<br/>')}</stack_trace>
+      `
+
+      this.element.appendChild(indicator)
     }
   },
 

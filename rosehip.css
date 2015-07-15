@@ -1,0 +1,47 @@
+.rosehip {
+  padding: 10px;
+  border: 1px solid #DDD;
+  box-shadow: 1px 1px 2px 0px #DDD
+}
+
+.rosehip test_indicator {
+  font-family: Helvetica, Arial, sans-serif;
+  display: block;
+  border-radius: 3px;
+  margin: 10px;
+}
+
+.rosehip test_indicator > * {
+  padding: 10px;
+}
+
+.rosehip test_indicator status {
+  display: inline-block;
+  width: 100px;
+  padding-left: 1em;
+  border-right: 1px solid rgba(0,0,0,0.3);
+}
+
+.rosehip test_indicator test_name {
+  display: inline-block;
+}
+
+.rosehip test_indicator stack_trace {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 2em;
+  display: block;
+  font-family: Monaco, Consolas, "Courier New", Courier, monospace;
+  font-size: 90%;
+  line-height: 1.5em;
+  background-color: rgb(250, 217, 210);
+
+}
+
+.rosehip test_indicator.success {
+  background-color: rgb(174, 237, 117);
+}
+
+.rosehip test_indicator.failure {
+  background-color: rgb(242, 99, 68);
+}

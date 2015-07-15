@@ -10,10 +10,11 @@ An uncomplicated, no-frills unit JavaScript testing library you can use in Node.
 
 ### Browser standalone:
 
-Download `rosehip.standalone.js` and include it:
+Download `rosehip.js` (and `rosehip.css`!) and include it:
 
 ```html
-<script type="application/javascript" src="rosehip.standalone.js"></script>
+<link rel="stylesheet" href="rosehip.css"/>
+<script type="application/javascript" src="rosehip.js"></script>
 ```
 
 ## Setup
@@ -28,7 +29,18 @@ var expect = require('expect.js') // Optional; you can use Node's assert or shou
 
 ``` javascript
 var test_suite = new rosehip.TestSuite()
-test_suite.reporter = new rosehip.ConsoleReporter()
+```
+### Reporters
+
+Output to `console.log`:
+```javascript
+  test_suite.reporter = new rosehip.ConsoleReporter()
+```
+
+Or, if running in a browser:
+```javascript
+  var element = document.getElementById('test_report')
+  test_suite.reporter = new rosehip.WebReporter(element)
 ```
 
 ## Defining Tests
@@ -41,7 +53,6 @@ test_suite.reporter = new rosehip.ConsoleReporter()
     })
   })
 ```
-
 
 ## Running
 
