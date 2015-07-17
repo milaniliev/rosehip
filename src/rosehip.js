@@ -1,6 +1,6 @@
 let EventEmitter = require('eventemitter2').EventEmitter2
 
-// let style = require('./rosehip.css')
+let style = require('./rosehip.css')
 
 let Test =  class extends EventEmitter {
   constructor(text){

@@ -1,4 +1,43 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rosehip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rosehip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+module.exports = function (css, customDocument) {
+  var doc = customDocument || document;
+  if (doc.createStyleSheet) {
+    var sheet = doc.createStyleSheet()
+    sheet.cssText = css;
+    return sheet.ownerNode;
+  } else {
+    var head = doc.getElementsByTagName('head')[0],
+        style = doc.createElement('style');
+
+    style.type = 'text/css';
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(doc.createTextNode(css));
+    }
+
+    head.appendChild(style);
+    return style;
+  }
+};
+
+module.exports.byUrl = function(url) {
+  if (document.createStyleSheet) {
+    return document.createStyleSheet(url).ownerNode;
+  } else {
+    var head = document.getElementsByTagName('head')[0],
+        link = document.createElement('link');
+
+    link.rel = 'stylesheet';
+    link.href = url;
+
+    head.appendChild(link);
+    return link;
+  }
+};
+
+},{}],2:[function(_dereq_,module,exports){
 /*!
  * EventEmitter2
  * https://github.com/hij1nx/EventEmitter2
@@ -573,7 +612,9 @@
   }
 }();
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
+var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip test_indicator {\n  font-family: Helvetica, Arial, sans-serif;\n  display: block;\n  border-radius: 3px;\n  margin: 10px;\n}\n\n.rosehip test_indicator > * {\n  padding: 10px;\n}\n\n.rosehip test_indicator status {\n  display: inline-block;\n  width: 100px;\n  padding-left: 1em;\n  border-right: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip test_indicator test_name {\n  display: inline-block;\n}\n\n.rosehip test_indicator stack_trace {\n  padding-top: 1em;\n  padding-bottom: 1em;\n  padding-left: 2em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  background-color: rgb(250, 217, 210);\n\n}\n\n.rosehip test_indicator.success {\n  background-color: rgb(174, 237, 117);\n}\n\n.rosehip test_indicator.failure {\n  background-color: rgb(242, 99, 68);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
+},{"./../node_modules/cssify":1}],4:[function(_dereq_,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -584,9 +625,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var EventEmitter = require('eventemitter2').EventEmitter2;
+var EventEmitter = _dereq_('eventemitter2').EventEmitter2;
 
-// let style = require('./rosehip.css')
+var style = _dereq_('./rosehip.css');
 
 var Test = (function (_EventEmitter) {
   _inherits(Test, _EventEmitter);
@@ -715,5 +756,5 @@ module.exports = {
   })()
 };
 
-},{"eventemitter2":1}]},{},[2])(2)
+},{"./rosehip.css":3,"eventemitter2":2}]},{},[4])(4)
 });
