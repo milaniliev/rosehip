@@ -8,7 +8,7 @@ test_suite.describe("Carrot", function(test){
     expect("yellow").to.equal("orange")
   })
 
-  test.it("is a vegerable", function(){
+  test.it("is a vegetable", function(){
     expect("vegetable").to.equal("vegetable")
   })
 })
