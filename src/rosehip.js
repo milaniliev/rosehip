@@ -62,7 +62,6 @@ module.exports = {
       indicator.innerHTML = `<status>F A I L</status> <test_name>${options.name}</test_name>
         <stack_trace>${options.error.stack.replace(/\n/g,'<br/>')}</stack_trace>
       `
-
       this.element.appendChild(indicator)
     }
   },
