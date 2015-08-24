@@ -6,9 +6,13 @@
 
 .rosehip test_indicator {
   font-family: Helvetica, Arial, sans-serif;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   border-radius: 3px;
   margin: 10px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-left: 7px solid transparent;
 }
 
 .rosehip test_indicator > * {
@@ -17,31 +21,49 @@
 
 .rosehip test_indicator status {
   display: inline-block;
-  width: 100px;
-  padding-left: 1em;
-  border-right: 1px solid rgba(0,0,0,0.3);
+  width: 5em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 0px 0px 1px #000;
 }
-
 .rosehip test_indicator test_name {
   display: inline-block;
+  font-weight: normal;
+  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+
 }
 
 .rosehip test_indicator stack_trace {
-  padding-top: 1em;
-  padding-bottom: 1em;
-  padding-left: 2em;
+  /*padding-top: 1em;
+  padding-bottom: 1em;*/
+  padding-left: 1em;
   display: block;
   font-family: Monaco, Consolas, "Courier New", Courier, monospace;
   font-size: 90%;
   line-height: 1.5em;
-  background-color: rgb(250, 217, 210);
-
+  border-left: 1px dashed rgb(237, 74, 4);
+  background-color: rgb(255, 243, 237);
 }
 
 .rosehip test_indicator.success {
-  background-color: rgb(174, 237, 117);
+  border-color: rgb(90, 191, 0);
+  background-color: rgb(244, 255, 217);
 }
 
 .rosehip test_indicator.failure {
-  background-color: rgb(242, 99, 68);
+  border-color: rgb(237, 74, 4);
+  background-color: rgb(255, 243, 237);
+}
+
+.rosehip test_indicator.success status {
+  border-color: rgb(91, 194, 0);
+  color: white;
+  background-color: rgb(90, 191, 0);
+}
+
+.rosehip test_indicator.failure status {
+  border-color: rgb(237, 45, 4);
+  color: white;
+  background-color: rgb(237, 74, 4);
 }
