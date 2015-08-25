@@ -56,8 +56,8 @@ Or, if running in a browser:
 
 Also take a look at these examples:
 
-Standalone: (test/standalone.html)
-Browserify: (test/src/test.js)
+* Standalone: [test/standalone.html](test/standalone.html)
+* Browserify: [test/src/test.js](test/src/test.js)
 
 ## Running
 
