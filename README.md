@@ -73,7 +73,7 @@ test_suite.describe("A carrot", function(test){
     test.it("explodes after 10 seconds", function(done){
       carrot.wind(function(){
         expect(carrot.exploded).to.equal(true)
-        done()
+        done() // if this is not called after 60 seconds, test fails.
       })
     })
   })
