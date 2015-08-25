@@ -5,17 +5,40 @@
 }
 
 .rosehip rosehip_test_suite {
+  text-transform: uppercase;
+  font-weight: bold;
   display: block;
-  padding: 10px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite suite_name::before {
+  content: " ... ";
+}
+
+.rosehip rosehip_test_suite suite_name {
+  letter-spacing: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: block;
+  font-size: 14px;
+  line-height: 30px;
+  background-color: #fafafa;
+}
+
+.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite {
+  margin-left: 10px;
 }
 
 .rosehip rosehip_test {
   font-family: Helvetica, Arial, sans-serif;
   display: flex;
+  text-transform: none;
+  font-size: 16px;
   flex-direction: row;
   flex-wrap: nowrap;
   border-radius: 3px;
-  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border: 1px solid rgba(0,0,0,0.3);
 }
 

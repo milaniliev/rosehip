@@ -26,7 +26,9 @@ class TestDisplay {
       })
     } else {
       this.element = document.createElement('rosehip_test_suite')
-      this.element.textContent = test.name
+      if(test.name){
+        this.element.innerHTML = `<suite_name>${test.name}</suite_name>`
+      }
       container_element.appendChild(this.element)
       test.nested_tests.forEach((nested_test) => {
         let display = new TestDisplay(nested_test, this.element)

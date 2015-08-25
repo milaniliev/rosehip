@@ -1,12 +1,10 @@
 # Rosehip
 
-An uncomplicated, no-magic JavaScript unit testing library for Node.JS and browser.
+A simple, no-magic JavaScript unit testing library for browsers and Node.JS.
 
-## Why another testing library?
+Because (Mocha)[http://mochajs.org] is very nice, but uses a lot of magic to define tests, making it very compilcated to use in the middle of a pipeline (say, if one wants to compile the tests using CoffeeScript or Babel).
 
-Good question. (Mocha)[http://mochajs.org] is very good, but uses a lot of magic to define tests, making it virtually impossible to use in the middle of a pipeline (say, if one wants to compile the tests using CoffeeScript or Babel). Why shouldn't tests just be a simple library?
-
-Rosehip is a single object, uses no magic, and defines no globals (unless using the Standalone build).
+Therefore, Rosehip's unit tests are a regular JavaScript object with a `run()` function.
 
 ## Install
 
@@ -43,7 +41,7 @@ Output to `console.log`:
   var reporter = new rosehip.ConsoleReporter(test_suite)
 ```
 
-Or, if running in a browser:
+Or, if running in a browser, get a pretty dashboard:
 ```javascript
   var element = document.getElementById('test_report')
   var reporter = new rosehip.WebReporter(element, test_suite)
