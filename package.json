@@ -1,7 +1,7 @@
 {
   "name": "rosehip",
-  "description": "An ultra-simple browser/server test suite library",
-  "version": "0.5.1",
+  "description": "An uncomplicated, no-magic JavaScript unit testing library for Node.JS and browser.",
+  "version": "0.5.2",
   "main": "rosehip.js",
   "repository": "https://github.com/milaniliev/rosehip.git",
   "author": "Milan Iliev",
