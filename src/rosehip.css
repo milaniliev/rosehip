@@ -101,7 +101,7 @@
 }
 
 .rosehip rosehip_test.success status {
-  border-color: rgb(91, 194, 0);
+  border-color:  rgb(90, 191, 0);
   color: white;
   background-color: rgb(90, 191, 0);
 }
@@ -112,7 +112,7 @@
 }
 
 .rosehip rosehip_test.failure status {
-  border-color: rgb(237, 45, 4);
+  border-color: rgb(237, 74, 4);
   color: white;
   background-color: rgb(237, 74, 4);
 }
