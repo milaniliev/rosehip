@@ -677,7 +677,9 @@ var TestDisplay = function TestDisplay(test, container_element) {
     });
   } else {
     this.element = document.createElement('rosehip_test_suite');
-    this.element.textContent = test.name;
+    if (test.name) {
+      this.element.innerHTML = '<suite_name>' + test.name + '</suite_name>';
+    }
     container_element.appendChild(this.element);
     test.nested_tests.forEach(function (nested_test) {
       var display = new TestDisplay(nested_test, _this.element);
@@ -695,7 +697,7 @@ module.exports = function WebReporter(element, test) {
 };
 
 },{}],5:[function(_dereq_,module,exports){
-var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip rosehip_test_suite {\n  display: block;\n  padding: 10px;\n}\n\n.rosehip rosehip_test {\n  font-family: Helvetica, Arial, sans-serif;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  border-radius: 3px;\n  margin: 10px;\n  border: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip rosehip_test > * {\n  padding: 10px;\n}\n\n.rosehip rosehip_test status {\n  display: inline-block;\n  width: 5em;\n  text-align: center;\n  font-weight: bold;\n  font-size: 12px;\n  line-height: 18px;\n  text-shadow: 0px 0px 1px #000;\n}\n.rosehip rosehip_test test_name {\n  display: inline-block;\n  font-weight: normal;\n  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);\n}\n\n.rosehip rosehip_test stack_trace {\n  /*padding-top: 1em;\n  padding-bottom: 1em;*/\n  padding-left: 1em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  border-left: 1px dashed rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test {\n  border-color: #777;\n  background-color: #EEE;\n}\n\n.rosehip rosehip_test status {\n  border-color: #777;\n  color: white;\n  background-color: #777;\n}\n\n.rosehip rosehip_test.running {\n  border-color: #ffed00;\n  background-color: #fffeeb;\n}\n\n.rosehip rosehip_test.running status {\n  border-color: #ffed00;\n  color: white;\n  background-color: #ffed00;\n}\n\n.rosehip rosehip_test.success {\n  border-color: rgb(90, 191, 0);\n  background-color: rgb(244, 255, 217);\n}\n\n.rosehip rosehip_test.success status {\n  border-color: rgb(91, 194, 0);\n  color: white;\n  background-color: rgb(90, 191, 0);\n}\n\n.rosehip rosehip_test.failure {\n  border-color: rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test.failure status {\n  border-color: rgb(237, 45, 4);\n  color: white;\n  background-color: rgb(237, 74, 4);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
+var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip rosehip_test_suite {\n  text-transform: uppercase;\n  font-weight: bold;\n  display: block;\n  font-family: Helvetica, Arial, sans-serif;\n}\n\n.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite suite_name::before {\n  content: \" ... \";\n}\n\n.rosehip rosehip_test_suite suite_name {\n  letter-spacing: 1px;\n  padding-left: 15px;\n  padding-right: 15px;\n  display: block;\n  font-size: 14px;\n  line-height: 30px;\n  background-color: #fafafa;\n}\n\n.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite {\n  margin-left: 10px;\n}\n\n.rosehip rosehip_test {\n  font-family: Helvetica, Arial, sans-serif;\n  display: flex;\n  text-transform: none;\n  font-size: 16px;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  border-radius: 3px;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  border: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip rosehip_test > * {\n  padding: 10px;\n}\n\n.rosehip rosehip_test status {\n  display: inline-block;\n  width: 5em;\n  text-align: center;\n  font-weight: bold;\n  font-size: 12px;\n  line-height: 18px;\n  text-shadow: 0px 0px 1px #000;\n}\n.rosehip rosehip_test test_name {\n  display: inline-block;\n  font-weight: normal;\n  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);\n}\n\n.rosehip rosehip_test stack_trace {\n  /*padding-top: 1em;\n  padding-bottom: 1em;*/\n  padding-left: 1em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  border-left: 1px dashed rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test {\n  border-color: #777;\n  background-color: #EEE;\n}\n\n.rosehip rosehip_test status {\n  border-color: #777;\n  color: white;\n  background-color: #777;\n}\n\n.rosehip rosehip_test.running {\n  border-color: #ffed00;\n  background-color: #fffeeb;\n}\n\n.rosehip rosehip_test.running status {\n  border-color: #ffed00;\n  color: white;\n  background-color: #ffed00;\n}\n\n.rosehip rosehip_test.success {\n  border-color: rgb(90, 191, 0);\n  background-color: rgb(244, 255, 217);\n}\n\n.rosehip rosehip_test.success status {\n  border-color:  rgb(90, 191, 0);\n  color: white;\n  background-color: rgb(90, 191, 0);\n}\n\n.rosehip rosehip_test.failure {\n  border-color: rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test.failure status {\n  border-color: rgb(237, 74, 4);\n  color: white;\n  background-color: rgb(237, 74, 4);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
 },{"./../node_modules/cssify":1}],6:[function(_dereq_,module,exports){
 'use strict';
 
@@ -881,7 +883,7 @@ test_suite.describe("A carrot", function(test){
     test.it("explodes after 10 seconds", function(done){
       carrot.wind(function(){
         expect(carrot.exploded).to.equal(true)
-        done()
+        done() // if this is not called after 60 seconds, test fails.
       })
     })
   })
