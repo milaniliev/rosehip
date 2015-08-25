@@ -6,13 +6,17 @@ Because (Mocha)[http://mochajs.org] is very nice, but uses a lot of magic to def
 
 Therefore, Rosehip's unit tests are a regular JavaScript object with a `run()` function.
 
+![rosehip-screenshot](screenshot.png)
+
+
 ## Install
 
-### Node.JS / Browserify:
+### Node.JS or Browserify:
 
 `npm install --save-dev rosehip`
 
 ### Browser standalone:
+
 
 Download `rosehip.js` (and `rosehip.css`!) and include it:
 
@@ -22,7 +26,7 @@ Download `rosehip.js` (and `rosehip.css`!) and include it:
 ```
 
 ## Setup
-### Node.JS / Browserify:
+### Node.JS or Browserify:
 
 ```javascript
 var rosehip = require('rosehip')
