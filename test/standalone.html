@@ -8,20 +8,45 @@
     <div id="rosehip_report"></div>
 
     <script type="application/javascript">
-      var test_suite = new rosehip.TestSuite()
-      test_suite.reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'))
+      var test_suite = new rosehip.Test()
 
-      test_suite.describe("Carrot", function(test){
-        test.it("is orange", function(){
-          expect("yellow").to.equal("orange")
+      // A carrot
+      var carrot = {
+        type: "vegetable",
+        color: "yellow", // this carrot is weird
+        wind: function(callback){
+          var self = this // setTimeout steals 'this'
+          setTimeout(function(){
+            self.exploded = true
+            callback()
+          }, 10000)
+        } // I knew it. Yellow carrots?
+      }
+
+      test_suite.describe("A carrot", function(test){
+        test.it("is a vegetable", function(){
+          expect(carrot.type).to.equal("vegetable")
         })
 
-        test.it("is a vegerable", function(){
-          expect("vegetable").to.equal("vegetable")
+        test.it("is orange", function(){
+          expect(carrot.color).to.equal("orange")
+        })
+
+        test.describe("that explodes", function(test){
+          test.it("explodes after 10 seconds", function(done){
+            carrot.wind(function(){
+              expect(carrot.exploded).to.equal(true)
+              done()
+            })
+          })
         })
       })
 
-      test_suite.run()
+      var reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'), test_suite)
+      setTimeout(function(){
+        test_suite.run()
+      }, 1000)
+
     </script>
   </body>
 </html>

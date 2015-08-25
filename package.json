@@ -1,7 +1,7 @@
 {
   "name": "rosehip",
   "description": "An ultra-simple browser/server test suite library",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "main": "rosehip.js",
   "repository": "https://github.com/milaniliev/rosehip.git",
   "author": "Milan Iliev",

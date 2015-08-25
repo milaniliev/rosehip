@@ -642,42 +642,58 @@ module.exports = (function () {
 },{}],4:[function(_dereq_,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-module.exports = (function () {
-  function WebReporter(element) {
-    _classCallCheck(this, WebReporter);
+var TestDisplay = function TestDisplay(test, container_element) {
+  var _this = this;
 
-    this.element = element;
-    this.element.classList.add('rosehip');
+  _classCallCheck(this, TestDisplay);
+
+  if (test.runnable) {
+    this.element = document.createElement('rosehip_test');
+    this.element.innerHTML = '<status>PENDING</status><test_name>' + test.name + '</test_name><stack_trace></stack_trace>';
+    this.status_indicator = this.element.querySelector('status');
+    this.stack_trace = this.element.querySelector('stack_trace');
+    this.stack_trace.style.display = 'none';
+
+    container_element.appendChild(this.element);
+    test.on('start', function (options) {
+      _this.element.classList.add('running');
+      _this.status_indicator.textContent = 'RUNNING';
+    });
+    test.on('success', function (options) {
+      _this.element.classList.remove('running');
+      _this.element.classList.add('success');
+      _this.status_indicator.textContent = 'P A S S';
+    });
+    test.on('failure', function (options) {
+      _this.element.classList.remove('running');
+      _this.element.classList.add('failure');
+      _this.status_indicator.textContent = 'F A I L';
+      _this.stack_trace.innerHTML = options.error.stack.replace(/\n/g, '<br/>');
+      _this.stack_trace.style.display = '';
+    });
+  } else {
+    this.element = document.createElement('rosehip_test_suite');
+    this.element.textContent = test.name;
+    container_element.appendChild(this.element);
+    test.nested_tests.forEach(function (nested_test) {
+      var display = new TestDisplay(nested_test, _this.element);
+    });
   }
+};
 
-  _createClass(WebReporter, [{
-    key: 'success',
-    value: function success(options) {
-      var indicator = document.createElement('test_indicator');
-      indicator.classList.add('success');
-      indicator.innerHTML = '<status>P A S S</status><test_name>' + options.name + '</test_name>';
+module.exports = function WebReporter(element, test) {
+  _classCallCheck(this, WebReporter);
 
-      this.element.appendChild(indicator);
-    }
-  }, {
-    key: 'failure',
-    value: function failure(options) {
-      var indicator = document.createElement('test_indicator');
-      indicator.classList.add('failure');
-      indicator.innerHTML = '<status>F A I L</status> <test_name>' + options.name + '</test_name>\n      <stack_trace>' + options.error.stack.replace(/\n/g, '<br/>') + '</stack_trace>\n    ';
-      this.element.appendChild(indicator);
-    }
-  }]);
-
-  return WebReporter;
-})();
+  this.element = element;
+  this.element.classList.add('rosehip');
+  this.test = test;
+  this.display = new TestDisplay(test, this.element);
+};
 
 },{}],5:[function(_dereq_,module,exports){
-var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip test_indicator {\n  font-family: Helvetica, Arial, sans-serif;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  border-radius: 3px;\n  margin: 10px;\n  border: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip test_indicator > * {\n  padding: 10px;\n}\n\n.rosehip test_indicator status {\n  display: inline-block;\n  width: 5em;\n  text-align: center;\n  font-weight: bold;\n  font-size: 12px;\n  line-height: 18px;\n  text-shadow: 0px 0px 1px #000;\n}\n.rosehip test_indicator test_name {\n  display: inline-block;\n  font-weight: normal;\n  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);\n\n}\n\n.rosehip test_indicator stack_trace {\n  /*padding-top: 1em;\n  padding-bottom: 1em;*/\n  padding-left: 1em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  border-left: 1px dashed rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip test_indicator.success {\n  border-color: rgb(90, 191, 0);\n  background-color: rgb(244, 255, 217);\n}\n\n.rosehip test_indicator.failure {\n  border-color: rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip test_indicator.success status {\n  border-color: rgb(91, 194, 0);\n  color: white;\n  background-color: rgb(90, 191, 0);\n}\n\n.rosehip test_indicator.failure status {\n  border-color: rgb(237, 45, 4);\n  color: white;\n  background-color: rgb(237, 74, 4);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
+var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip rosehip_test_suite {\n  display: block;\n  padding: 10px;\n}\n\n.rosehip rosehip_test {\n  font-family: Helvetica, Arial, sans-serif;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  border-radius: 3px;\n  margin: 10px;\n  border: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip rosehip_test > * {\n  padding: 10px;\n}\n\n.rosehip rosehip_test status {\n  display: inline-block;\n  width: 5em;\n  text-align: center;\n  font-weight: bold;\n  font-size: 12px;\n  line-height: 18px;\n  text-shadow: 0px 0px 1px #000;\n}\n.rosehip rosehip_test test_name {\n  display: inline-block;\n  font-weight: normal;\n  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);\n}\n\n.rosehip rosehip_test stack_trace {\n  /*padding-top: 1em;\n  padding-bottom: 1em;*/\n  padding-left: 1em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  border-left: 1px dashed rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test {\n  border-color: #777;\n  background-color: #EEE;\n}\n\n.rosehip rosehip_test status {\n  border-color: #777;\n  color: white;\n  background-color: #777;\n}\n\n.rosehip rosehip_test.running {\n  border-color: #ffed00;\n  background-color: #fffeeb;\n}\n\n.rosehip rosehip_test.running status {\n  border-color: #ffed00;\n  color: white;\n  background-color: #ffed00;\n}\n\n.rosehip rosehip_test.success {\n  border-color: rgb(90, 191, 0);\n  background-color: rgb(244, 255, 217);\n}\n\n.rosehip rosehip_test.success status {\n  border-color: rgb(91, 194, 0);\n  color: white;\n  background-color: rgb(90, 191, 0);\n}\n\n.rosehip rosehip_test.failure {\n  border-color: rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test.failure status {\n  border-color: rgb(237, 45, 4);\n  color: white;\n  background-color: rgb(237, 74, 4);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
 },{"./../node_modules/cssify":1}],6:[function(_dereq_,module,exports){
 'use strict';
 
@@ -686,10 +702,10 @@ var style = _dereq_('./rosehip.css'); // auto-included on the page by cssify
 module.exports = {
   ConsoleReporter: _dereq_('./reporters/console_reporter.js'),
   WebReporter: _dereq_('./reporters/web_reporter.js'),
-  TestSuite: _dereq_('./test_suite.js')
+  Test: _dereq_('./test.js')
 };
 
-},{"./reporters/console_reporter.js":3,"./reporters/web_reporter.js":4,"./rosehip.css":5,"./test_suite.js":8}],7:[function(_dereq_,module,exports){
+},{"./reporters/console_reporter.js":3,"./reporters/web_reporter.js":4,"./rosehip.css":5,"./test.js":7}],7:[function(_dereq_,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -705,40 +721,121 @@ var EventEmitter = _dereq_('eventemitter2').EventEmitter2;
 module.exports = (function (_EventEmitter) {
   _inherits(Test, _EventEmitter);
 
-  function Test(text) {
+  function Test(options) {
     _classCallCheck(this, Test);
 
     _get(Object.getPrototypeOf(Test.prototype), 'constructor', this).call(this);
-    this.text = text;
+    options = options || {};
+    this.name = options.name;
+    this.parent = options.parent;
+    this.test_function = options.test_function;
+    this.runnable = options.runnable;
+    this.async_timeout = options.async_timeout || 60000;
+    this.state = 'not_started';
+    this.nested_tests = [];
   }
 
   _createClass(Test, [{
     key: 'describe',
-    value: function describe(block_name, block_definition) {
+    value: function describe(name, block_definition) {
       var _this = this;
 
-      var nested_test = new Test(this.text + ' ' + block_name);
-      nested_test.on('success', function (options) {
-        return _this.emit('success', options);
+      var nested_test = new Test({ name: name, parent: this });
+      nested_test.on('nested:success', function (options) {
+        return _this.emit('nested:success', options);
       });
-      nested_test.on('failure', function (options) {
-        return _this.emit('failure', options);
+      nested_test.on('nested:failure', function (options) {
+        return _this.emit('nested:failure', options);
       });
       block_definition(nested_test);
+      this.nested_tests.push(nested_test);
     }
   }, {
     key: 'it',
-    value: function it(test_name, test_function) {
-      var failure = null;
-      try {
-        test_function();
-      } catch (exception) {
-        failure = exception;
-      } finally {
-        if (failure) {
-          this.emit('failure', { name: this.text + ' ' + test_name, error: failure });
+    value: function it(name, options, test_function) {
+      var _this2 = this;
+
+      if (test_function === undefined) {
+        test_function = options;
+        options = {};
+      }
+      var nested_test = new Test({ name: name, runnable: true, test_function: test_function, parent: this, async_timeout: options.async_timeout });
+      nested_test.on('success', function (options) {
+        return _this2.emit('nested:success', { test: nested_test });
+      });
+      nested_test.on('failure', function (options) {
+        return _this2.emit('nested:failure', { test: nested_test, error: options.error });
+      });
+      this.nested_tests.push(nested_test);
+    }
+  }, {
+    key: 'run',
+    value: function run() {
+      if (this.runnable) {
+        if (this.test_function.length > 0) {
+          return this.run_async_test_function();
         } else {
-          this.emit('success', { name: this.text + ' ' + test_name });
+          return this.run_sync_test_function();
+        }
+      } else {
+        this.nested_tests.forEach(function (nested_test) {
+          nested_test.run();
+        });
+      }
+    }
+  }, {
+    key: 'fail',
+    value: function fail(error) {
+      this.state = 'failed';
+      this.emit('failure', { error: error });
+    }
+  }, {
+    key: 'pass',
+    value: function pass() {
+      this.state = 'succeeded';
+      this.emit('success');
+    }
+  }, {
+    key: 'run_async_test_function',
+    value: function run_async_test_function() {
+      var _this3 = this;
+
+      var error = null;
+      try {
+        (function () {
+          _this3.state = 'running';
+          _this3.emit('start');
+          var timeout = setTimeout(function () {
+            _this3.fail(new Error('Async function is not done after ' + _this3.async_timeout + 'ms.'));
+          }, _this3.async_timeout);
+          _this3.test_function(function () {
+            clearTimeout(timeout);
+            _this3.pass();
+          });
+        })();
+      } catch (exception) {
+        error = exception;
+      } finally {
+        if (error) {
+          this.fail(error);
+        }
+      }
+    }
+  }, {
+    key: 'run_sync_test_function',
+    value: function run_sync_test_function() {
+      var error = null;
+      try {
+        this.state = 'running';
+        this.emit('start');
+        this.test_function();
+      } catch (exception) {
+        error = exception;
+      } finally {
+        if (error) {
+          this.fail(error);
+        } else {
+          this.pass();
         }
       }
     }
@@ -747,43 +844,5 @@ module.exports = (function (_EventEmitter) {
   return Test;
 })(EventEmitter);
 
-},{"eventemitter2":2}],8:[function(_dereq_,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var Test = _dereq_('./test.js');
-
-module.exports = (function () {
-  function TestSuite() {
-    _classCallCheck(this, TestSuite);
-  }
-
-  _createClass(TestSuite, [{
-    key: 'describe',
-    value: function describe(text, block) {
-      var _this = this;
-
-      this.test = new Test(text);
-      this.block = block;
-      this.test.on('success', function (options) {
-        return _this.reporter.success(options);
-      });
-      this.test.on('failure', function (options) {
-        return _this.reporter.failure(options);
-      });
-    }
-  }, {
-    key: 'run',
-    value: function run() {
-      this.block(this.test);
-    }
-  }]);
-
-  return TestSuite;
-})();
-
-},{"./test.js":7}]},{},[6])(6)
+},{"eventemitter2":2}]},{},[6])(6)
 });

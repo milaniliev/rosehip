@@ -28,19 +28,19 @@ var expect = require('expect.js') // Optional; you can use Node's assert or shou
 ### Both Node.JS and standalone:
 
 ``` javascript
-var test_suite = new rosehip.TestSuite()
+var test_suite = new rosehip.Test()
 ```
 ### Reporters
 
 Output to `console.log`:
 ```javascript
-  test_suite.reporter = new rosehip.ConsoleReporter()
+  var reporter = new rosehip.ConsoleReporter(test_suite)
 ```
 
 Or, if running in a browser:
 ```javascript
   var element = document.getElementById('test_report')
-  test_suite.reporter = new rosehip.WebReporter(element)
+  var reporter = new rosehip.WebReporter(element, test_suite)
 ```
 
 ## Defining Tests
@@ -48,11 +48,16 @@ Or, if running in a browser:
   test_suite.describe("Carrot", function(test){
     test.describe("is a fruit", function(test){
       test.it("which contains vitamin A", function(){
-        expect(false).to.be.ok() // With expect.js; change it for your favorite assertion library.
+        expect(false).to.equal(true) // With expect.js; change it for your favorite assertion library.
       })
     })
   })
 ```
+
+Also take a look at these examples:
+
+Standalone: (test/standalone.html)
+Browserify: (test/src/test.js)
 
 ## Running
 
