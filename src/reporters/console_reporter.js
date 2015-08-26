@@ -11,10 +11,11 @@ class TestResult {
     if (this.test.runnable) {
 
       if (this.test.state === 'passed') {
-        this.print(colors.green("PASS") + ` ${this.test.name}`)
+        this.print(colors.brightGreen("PASS") + ` ${this.test.name}`)
       }
       if (this.test.state === 'failed') {
         this.print(colors.brightRed("FAIL") + ` ${this.test.name}`)
+        this.print(this.test.error.stack)
       }
     } else {
       if (this.test.name){ this.print(`${styles.bright(this.test.name)}`) }
@@ -38,8 +39,6 @@ class TestResult {
   print(text){
     console.log(`${this.buffer()}${text}`)
   }
-
-
 }
 
 module.exports = class ConsoleReporter {

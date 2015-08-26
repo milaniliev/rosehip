@@ -747,10 +747,11 @@ var TestResult = (function () {
       if (this.test.runnable) {
 
         if (this.test.state === 'passed') {
-          this.print(colors.green("PASS") + (' ' + this.test.name));
+          this.print(colors.brightGreen("PASS") + (' ' + this.test.name));
         }
         if (this.test.state === 'failed') {
           this.print(colors.brightRed("FAIL") + (' ' + this.test.name));
+          this.print(this.test.error.stack);
         }
       } else {
         if (this.test.name) {
@@ -962,6 +963,7 @@ module.exports = (function (_EventEmitter) {
     key: 'fail',
     value: function fail(error) {
       this.state = 'failed';
+      this.error = error;
       this.emit('failure', { error: error });
       if (this.isFinished) {
         this.emit('finished');

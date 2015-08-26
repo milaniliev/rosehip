@@ -82,6 +82,7 @@ module.exports = class Test extends EventEmitter {
 
   fail(error){
     this.state = 'failed'
+    this.error = error
     this.emit('failure', {error: error})
     if (this.isFinished) { this.emit('finished') }
   }
