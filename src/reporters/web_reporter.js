@@ -39,6 +39,7 @@ class TestDisplay {
 
 module.exports = class WebReporter {
   constructor (element, test) {
+    let style = require('../rosehip.css') // auto-included on the page by cssify
     this.element = element
     this.element.classList.add('rosehip')
     this.test = test

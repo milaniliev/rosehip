@@ -1,6 +1,113 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rosehip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+// ColorCodes explained: http://www.termsys.demon.co.uk/vtansi.htm
+'use strict';
+
+var colorNums = {
+      white         :  37
+    , black         :  30
+    , blue          :  34
+    , cyan          :  36
+    , green         :  32
+    , magenta       :  35
+    , red           :  31
+    , yellow        :  33
+    , brightBlack   :  90
+    , brightRed     :  91
+    , brightGreen   :  92
+    , brightYellow  :  93
+    , brightBlue    :  94
+    , brightMagenta :  95
+    , brightCyan    :  96
+    , brightWhite   :  97
+    }
+  , backgroundColorNums = {
+      bgBlack         :  40
+    , bgRed           :  41
+    , bgGreen         :  42
+    , bgYellow        :  43
+    , bgBlue          :  44
+    , bgMagenta       :  45
+    , bgCyan          :  46
+    , bgWhite         :  47
+    , bgBrightBlack   :  100
+    , bgBrightRed     :  101
+    , bgBrightGreen   :  102
+    , bgBrightYellow  :  103
+    , bgBrightBlue    :  104
+    , bgBrightMagenta :  105
+    , bgBrightCyan    :  106
+    , bgBrightWhite   :  107
+    } 
+  , open   =  {}
+  , close  =  {}
+  , colors =  {}
+  ;
+
+Object.keys(colorNums).forEach(function (k) {
+  var o =  open[k]  =  '\u001b[' + colorNums[k] + 'm';
+  var c =  close[k] =  '\u001b[39m';
+
+  colors[k] = function (s) { 
+    return o + s + c;
+  };
+});
+
+Object.keys(backgroundColorNums).forEach(function (k) {
+  var o =  open[k]  =  '\u001b[' + backgroundColorNums[k] + 'm';
+  var c =  close[k] =  '\u001b[49m';
+
+  colors[k] = function (s) { 
+    return o + s + c;
+  };
+});
+
+module.exports =  colors;
+colors.open    =  open;
+colors.close   =  close;
+
+},{}],2:[function(_dereq_,module,exports){
+'use strict';
+
+/*
+ * Info: http://www.termsys.demon.co.uk/vtansi.htm#colors 
+ * Following caveats
+ * bright    - brightens the color (bold-blue is same as brigthtBlue)
+ * dim       - nothing on Mac or Linux
+ * italic    - nothing on Mac or Linux
+ * underline - underlines string
+ * blink     - nothing on Mac or linux
+ * inverse   - background becomes foreground and vice versa
+ *
+ * In summary, the only styles that work are:
+ *  - bright, underline and inverse
+ *  - the others are only included for completeness
+ */
+
+var styleNums = {
+    reset     :  [0, 22]
+  , bright    :  [1, 22]
+  , dim       :  [2, 22]
+  , italic    :  [3, 23]
+  , underline :  [4, 24]
+  , blink     :  [5, 25]
+  , inverse   :  [7, 27]
+  }
+  , styles = {}
+  ;
+
+Object.keys(styleNums).forEach(function (k) {
+  styles[k] = function (s) { 
+    var open = styleNums[k][0]
+      , close = styleNums[k][1];
+    return '\u001b[' + open + 'm' + s + '\u001b[' + close + 'm';
+  };
+});
+
+module.exports = styles;
+
+},{}],3:[function(_dereq_,module,exports){
 module.exports = function (css, customDocument) {
   var doc = customDocument || document;
   if (doc.createStyleSheet) {
@@ -39,7 +146,7 @@ module.exports.byUrl = function(url) {
   }
 };
 
-},{}],2:[function(_dereq_,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 /*!
  * EventEmitter2
  * https://github.com/hij1nx/EventEmitter2
@@ -614,34 +721,94 @@ module.exports.byUrl = function(url) {
   }
 }();
 
-},{}],3:[function(_dereq_,module,exports){
-"use strict";
+},{}],5:[function(_dereq_,module,exports){
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var colors = _dereq_('ansicolors');
+var styles = _dereq_('ansistyles');
+
+var TestResult = (function () {
+  function TestResult(test) {
+    var depth = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+    _classCallCheck(this, TestResult);
+
+    this.test = test;
+    this.depth = depth;
+  }
+
+  _createClass(TestResult, [{
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      if (this.test.runnable) {
+
+        if (this.test.state === 'passed') {
+          this.print(colors.green("PASS") + (' ' + this.test.name));
+        }
+        if (this.test.state === 'failed') {
+          this.print(colors.brightRed("FAIL") + (' ' + this.test.name));
+        }
+      } else {
+        if (this.test.name) {
+          this.print('' + styles.bright(this.test.name));
+        }
+      }
+
+      this.test.nested_tests.forEach(function (nested_test) {
+        new TestResult(nested_test, _this.depth + 1).render();
+      });
+    }
+  }, {
+    key: 'buffer',
+    value: function buffer() {
+      var buffer = "";
+      var depth = this.depth;
+      while (depth > 0) {
+        buffer = buffer + "  ";
+        depth = depth - 1;
+      }
+      return buffer;
+    }
+  }, {
+    key: 'print',
+    value: function print(text) {
+      console.log('' + this.buffer() + text);
+    }
+  }]);
+
+  return TestResult;
+})();
 
 module.exports = (function () {
-  function ConsoleReporter() {
+  function ConsoleReporter(test) {
+    var _this2 = this;
+
     _classCallCheck(this, ConsoleReporter);
+
+    this.test = test;
+    test.on('finished', function () {
+      _this2.render_results();
+    });
+    console.log(styles.dim("Running tests..."));
   }
 
   _createClass(ConsoleReporter, [{
-    key: "success",
-    value: function success(options) {
-      console.log(options.name, "passed!");
-    }
-  }, {
-    key: "failure",
-    value: function failure(options) {
-      console.log(options.name, "failed:", options.error);
+    key: 'render_results',
+    value: function render_results() {
+      new TestResult(this.test).render();
     }
   }]);
 
   return ConsoleReporter;
 })();
 
-},{}],4:[function(_dereq_,module,exports){
+},{"ansicolors":1,"ansistyles":2}],6:[function(_dereq_,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -690,18 +857,17 @@ var TestDisplay = function TestDisplay(test, container_element) {
 module.exports = function WebReporter(element, test) {
   _classCallCheck(this, WebReporter);
 
+  var style = _dereq_('../rosehip.css'); // auto-included on the page by cssify
   this.element = element;
   this.element.classList.add('rosehip');
   this.test = test;
   this.display = new TestDisplay(test, this.element);
 };
 
-},{}],5:[function(_dereq_,module,exports){
+},{"../rosehip.css":7}],7:[function(_dereq_,module,exports){
 var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow: 1px 1px 2px 0px #DDD\n}\n\n.rosehip rosehip_test_suite {\n  text-transform: uppercase;\n  font-weight: bold;\n  display: block;\n  font-family: Helvetica, Arial, sans-serif;\n}\n\n.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite suite_name::before {\n  content: \" ... \";\n}\n\n.rosehip rosehip_test_suite suite_name {\n  letter-spacing: 1px;\n  padding-left: 15px;\n  padding-right: 15px;\n  display: block;\n  font-size: 14px;\n  line-height: 30px;\n  background-color: #fafafa;\n}\n\n.rosehip rosehip_test_suite rosehip_test_suite rosehip_test_suite {\n  margin-left: 10px;\n}\n\n.rosehip rosehip_test {\n  font-family: Helvetica, Arial, sans-serif;\n  display: flex;\n  text-transform: none;\n  font-size: 16px;\n  flex-direction: row;\n  flex-wrap: nowrap;\n  border-radius: 3px;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  border: 1px solid rgba(0,0,0,0.3);\n}\n\n.rosehip rosehip_test > * {\n  padding: 10px;\n}\n\n.rosehip rosehip_test status {\n  display: inline-block;\n  width: 5em;\n  text-align: center;\n  font-weight: bold;\n  font-size: 12px;\n  line-height: 18px;\n  text-shadow: 0px 0px 1px #000;\n}\n.rosehip rosehip_test test_name {\n  display: inline-block;\n  font-weight: normal;\n  text-shadow: 0px 0px 1px rgba(0,0,0,0.4);\n}\n\n.rosehip rosehip_test stack_trace {\n  /*padding-top: 1em;\n  padding-bottom: 1em;*/\n  padding-left: 1em;\n  display: block;\n  font-family: Monaco, Consolas, \"Courier New\", Courier, monospace;\n  font-size: 90%;\n  line-height: 1.5em;\n  border-left: 1px dashed rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test {\n  border-color: #777;\n  background-color: #EEE;\n}\n\n.rosehip rosehip_test status {\n  border-color: #777;\n  color: white;\n  background-color: #777;\n}\n\n.rosehip rosehip_test.running {\n  border-color: #ffed00;\n  background-color: #fffeeb;\n}\n\n.rosehip rosehip_test.running status {\n  border-color: #ffed00;\n  color: white;\n  background-color: #ffed00;\n}\n\n.rosehip rosehip_test.success {\n  border-color: rgb(90, 191, 0);\n  background-color: rgb(244, 255, 217);\n}\n\n.rosehip rosehip_test.success status {\n  border-color:  rgb(90, 191, 0);\n  color: white;\n  background-color: rgb(90, 191, 0);\n}\n\n.rosehip rosehip_test.failure {\n  border-color: rgb(237, 74, 4);\n  background-color: rgb(255, 243, 237);\n}\n\n.rosehip rosehip_test.failure status {\n  border-color: rgb(237, 74, 4);\n  color: white;\n  background-color: rgb(237, 74, 4);\n}\n"; (_dereq_("./../node_modules/cssify"))(css); module.exports = css;
-},{"./../node_modules/cssify":1}],6:[function(_dereq_,module,exports){
+},{"./../node_modules/cssify":3}],8:[function(_dereq_,module,exports){
 'use strict';
-
-var style = _dereq_('./rosehip.css'); // auto-included on the page by cssify
 
 module.exports = {
   ConsoleReporter: _dereq_('./reporters/console_reporter.js'),
@@ -709,7 +875,7 @@ module.exports = {
   Test: _dereq_('./test.js')
 };
 
-},{"./reporters/console_reporter.js":3,"./reporters/web_reporter.js":4,"./rosehip.css":5,"./test.js":7}],7:[function(_dereq_,module,exports){
+},{"./reporters/console_reporter.js":5,"./reporters/web_reporter.js":6,"./test.js":9}],9:[function(_dereq_,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -718,7 +884,7 @@ var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_ag
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var EventEmitter = _dereq_('eventemitter2').EventEmitter2;
 
@@ -742,35 +908,42 @@ module.exports = (function (_EventEmitter) {
   _createClass(Test, [{
     key: 'describe',
     value: function describe(name, block_definition) {
-      var _this = this;
-
-      var nested_test = new Test({ name: name, parent: this });
-      nested_test.on('nested:success', function (options) {
-        return _this.emit('nested:success', options);
-      });
-      nested_test.on('nested:failure', function (options) {
-        return _this.emit('nested:failure', options);
-      });
+      var nested_test = this.create_nested_test({ name: name, parent: this });
       block_definition(nested_test);
-      this.nested_tests.push(nested_test);
     }
   }, {
     key: 'it',
     value: function it(name, options, test_function) {
-      var _this2 = this;
-
       if (test_function === undefined) {
         test_function = options;
         options = {};
       }
-      var nested_test = new Test({ name: name, runnable: true, test_function: test_function, parent: this, async_timeout: options.async_timeout });
+      this.create_nested_test({ name: name, runnable: true, test_function: test_function, parent: this, async_timeout: options.async_timeout });
+    }
+  }, {
+    key: 'create_nested_test',
+    value: function create_nested_test(test_options) {
+      var _this = this;
+
+      var nested_test = new Test(test_options);
       nested_test.on('success', function (options) {
-        return _this2.emit('nested:success', { test: nested_test });
+        if (_this.overall_state === 'passed') {
+          _this.pass();
+        }
       });
       nested_test.on('failure', function (options) {
-        return _this2.emit('nested:failure', { test: nested_test, error: options.error });
+        if (_this.state !== 'failed') {
+          _this.fail();
+        }
       });
+      nested_test.on('finished', function () {
+        if (_this.isFinished) {
+          _this.emit('finished');
+        }
+      });
+
       this.nested_tests.push(nested_test);
+      return nested_test;
     }
   }, {
     key: 'run',
@@ -792,29 +965,35 @@ module.exports = (function (_EventEmitter) {
     value: function fail(error) {
       this.state = 'failed';
       this.emit('failure', { error: error });
+      if (this.isFinished) {
+        this.emit('finished');
+      }
     }
   }, {
     key: 'pass',
     value: function pass() {
-      this.state = 'succeeded';
+      this.state = 'passed';
       this.emit('success');
+      if (this.isFinished) {
+        this.emit('finished');
+      }
     }
   }, {
     key: 'run_async_test_function',
     value: function run_async_test_function() {
-      var _this3 = this;
+      var _this2 = this;
 
       var error = null;
       try {
         (function () {
-          _this3.state = 'running';
-          _this3.emit('start');
+          _this2.state = 'running';
+          _this2.emit('start');
           var timeout = setTimeout(function () {
-            _this3.fail(new Error('Async function is not done after ' + _this3.async_timeout + 'ms.'));
-          }, _this3.async_timeout);
-          _this3.test_function(function () {
+            _this2.fail(new Error('Async function is not done after ' + _this2.async_timeout + 'ms.'));
+          }, _this2.async_timeout);
+          _this2.test_function(function () {
             clearTimeout(timeout);
-            _this3.pass();
+            _this2.pass();
           });
         })();
       } catch (exception) {
@@ -843,14 +1022,49 @@ module.exports = (function (_EventEmitter) {
         }
       }
     }
+  }, {
+    key: 'isFinished',
+    get: function get() {
+      var finished = null;
+      if (this.runnable) {
+        finished = false;
+        if (this.state === 'passed' || this.state === 'failed') {
+          finished = true;
+        }
+      } else {
+        finished = true;
+        this.nested_tests.forEach(function (test) {
+          if (!test.isFinished) {
+            finished = false;
+          }
+        });
+      }
+      return finished;
+    }
+  }, {
+    key: 'overall_state',
+    get: function get() {
+      var current_status = 'passed';
+      this.nested_tests.forEach(function (test) {
+        if (test.state === 'failed') {
+          current_status = 'failed';
+        }
+        if (test.state === 'running' && current_status !== 'failed') {
+          current_status = 'running';
+        }
+        if (test.state === 'not_started' && current_status !== 'failed' && current_status !== 'running') {
+          current_status = 'not_started';
+        }
+      });
+      return current_status;
+    }
   }]);
 
   return Test;
 })(EventEmitter);
 
-},{"eventemitter2":2}]},{},[6])(6)
+},{"eventemitter2":4}]},{},[8])(8)
 });
-
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
 var rosehip = require('../../')

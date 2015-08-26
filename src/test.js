@@ -14,11 +14,8 @@ module.exports = class Test extends EventEmitter {
   }
 
   describe (name, block_definition) {
-    let nested_test = new Test({name: name, parent: this})
-    nested_test.on('nested:success', (options) => this.emit('nested:success', options))
-    nested_test.on('nested:failure', (options) => this.emit('nested:failure', options))
+    let nested_test = this.create_nested_test({name: name, parent: this})
     block_definition(nested_test)
-    this.nested_tests.push(nested_test)
   }
 
   it (name, options, test_function) {
@@ -26,10 +23,47 @@ module.exports = class Test extends EventEmitter {
       test_function = options
       options = {}
     }
-    let nested_test = new Test({name: name, runnable: true, test_function: test_function, parent: this, async_timeout: options.async_timeout})
-    nested_test.on('success', (options) => this.emit('nested:success', {test: nested_test}))
-    nested_test.on('failure', (options) => this.emit('nested:failure', {test: nested_test, error: options.error}))
+    this.create_nested_test({name: name, runnable: true, test_function: test_function, parent: this, async_timeout: options.async_timeout})
+  }
+
+  create_nested_test(test_options){
+    let nested_test = new Test(test_options)
+    nested_test.on('success', (options) => {
+      if (this.overall_state === 'passed') { this.pass() }
+    })
+    nested_test.on('failure', (options) => {
+      if (this.state         !== 'failed' ){ this.fail() }
+    })
+    nested_test.on('finished', () => {
+      if (this.isFinished) { this.emit('finished') }
+    })
+
     this.nested_tests.push(nested_test)
+    return nested_test
+  }
+
+  get isFinished(){
+    let finished = null
+    if(this.runnable){
+      finished = false
+      if(this.state === 'passed' || this.state === 'failed'){ finished = true }
+    } else {
+      finished = true
+      this.nested_tests.forEach((test) => {
+        if(!test.isFinished){ finished = false }
+      })
+    }
+    return finished
+  }
+
+  get overall_state(){
+    let current_status = 'passed'
+    this.nested_tests.forEach((test) => {
+      if (test.state === 'failed')  { current_status = 'failed' }
+      if (test.state === 'running' && current_status !== 'failed') { current_status = 'running' }
+      if (test.state === 'not_started' && current_status !== 'failed' && current_status !== 'running') { current_status = 'not_started' }
+    })
+    return current_status
   }
 
   run() {
@@ -49,11 +83,13 @@ module.exports = class Test extends EventEmitter {
   fail(error){
     this.state = 'failed'
     this.emit('failure', {error: error})
+    if (this.isFinished) { this.emit('finished') }
   }
 
   pass(){
-    this.state = 'succeeded'
+    this.state = 'passed'
     this.emit('success')
+    if (this.isFinished) { this.emit('finished') }
   }
 
   run_async_test_function() {

@@ -11,5 +11,6 @@ test/browserify_test.js: test/src/browserify_test.js rosehip.js
 test: build test/browserify_test.js
 	# open test/standalone.html
 	# open test/browserify.html
+	node test/node.js
 
 .PHONY: test
