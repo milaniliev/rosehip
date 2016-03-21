@@ -2,7 +2,7 @@
 
 A simple, no-magic JavaScript unit testing library for browsers and Node.JS.
 
-Because [Mocha|http://mochajs.org] is very nice, but uses a lot of magic to define tests, making it very compilcated to use in the middle of a pipeline (say, if one wants to compile the tests using CoffeeScript or Babel).
+Because [Mocha](http://mochajs.org) is very nice, but uses a lot of magic to define tests, making it very compilcated to use in the middle of a pipeline (say, if one wants to compile the tests using CoffeeScript or Babel).
 
 Therefore, Rosehip's unit tests are a regular JavaScript object with a `run()` function.
 
@@ -97,7 +97,8 @@ setTimeout(function(){
 Also take a look at these examples:
 
 * Standalone: [test/standalone.html](test/standalone.html)
-* Browserify: [test/src/test.js](test/src/browserify_test.js)
+* Browserify: [test/src/browserify_test.js](test/src/browserify_test.js)
+* Node.js:    [test/node.js](test/node.js)
 
 ## Running
 
