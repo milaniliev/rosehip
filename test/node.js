@@ -32,6 +32,13 @@ test_suite.describe("A carrot", function(test){
         done() // if this is not called after 60 seconds, test fails.
       })
     })
+
+    test.it("un-explodes after 15 seconds", function(done){
+      carrot.wind(function(){
+          assert.equal(carrot.exploded, false, "carrot is still exploded")
+          done()
+      })
+    })
   })
 })
 

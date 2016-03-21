@@ -1,4 +1,5 @@
 let EventEmitter = require('eventemitter2').EventEmitter2
+let Promise = require('bluebird')
 
 module.exports = class Test extends EventEmitter {
   constructor(options){
@@ -13,12 +14,12 @@ module.exports = class Test extends EventEmitter {
     this.nested_tests = []
   }
 
-  describe (name, block_definition) {
+  describe(name, block_definition) {
     let nested_test = this.create_nested_test({name: name, parent: this})
     block_definition(nested_test)
   }
 
-  it (name, options, test_function) {
+  it(name, options, test_function) {
     if(test_function === undefined){
       test_function = options
       options = {}
@@ -81,10 +82,12 @@ module.exports = class Test extends EventEmitter {
   }
 
   fail(error){
-    this.state = 'failed'
-    this.error = error
-    this.emit('failure', {error: error})
-    if (this.isFinished) { this.emit('finished') }
+    if(this.state !== 'failed'){
+      this.state = 'failed'
+      this.error = error
+      this.emit('failure', {error: error})
+      if (this.isFinished) { this.emit('finished') }
+    }
   }
 
   pass(){
@@ -95,25 +98,24 @@ module.exports = class Test extends EventEmitter {
 
   run_async_test_function() {
     let error = null
-    try {
-      this.state = 'running'
-      this.emit('start')
+    this.state = 'running'
+    this.emit('start')
+    this.test_promise = Promise.try(() => {
       let timeout = setTimeout(() => {
-        this.fail(new Error(`Async function is not done after ${this.async_timeout}ms.`))
+        throw new Error(`Async function is not done after ${this.async_timeout}ms.`)
       }, this.async_timeout)
-      this.test_function(() => {
-        clearTimeout(timeout)
-        this.pass()
+      return new Promise((reject, resolve) => {
+        return this.test_function((error) => {
+          clearTimeout(timeout)
+          if (error) { reject(error) } else { resolve () }
+        })
       })
-    } catch (exception) {
-      error = exception
-    } finally {
-      if(error){
-        this.fail(error)
-      }
-    }
+    }).then(() => {
+      this.pass()
+    }).catch((error) => {
+      fail(error)
+    })
   }
-
 
   run_sync_test_function() {
     let error = null

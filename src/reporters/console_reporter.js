@@ -18,7 +18,11 @@ class TestResult {
         this.print(this.test.error.stack)
       }
     } else {
-      if (this.test.name){ this.print(`${styles.bright(this.test.name)}`) }
+
+      if (this.test.name){
+        console.log(" ")
+        this.print(`${styles.bright(this.test.name)}`)
+      }
     }
 
     this.test.nested_tests.forEach((nested_test) => {
