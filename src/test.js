@@ -109,7 +109,7 @@ module.exports = class Test extends EventEmitter {
       let timeout = setTimeout(() => {
         throw new Error(`Async function is not done() after ${this.async_timeout}ms.`)
       }, this.async_timeout)
-      return new Promise((reject, resolve) => {
+      return new Promise((resolve, reject) => {
         return this.test_function((error) => {
           clearTimeout(timeout)
           if (error) { reject(error) } else { resolve () }

@@ -5962,7 +5962,7 @@ module.exports = (function (_EventEmitter) {
         var timeout = setTimeout(function () {
           throw new Error('Async function is not done() after ' + _this2.async_timeout + 'ms.');
         }, _this2.async_timeout);
-        return new Promise(function (reject, resolve) {
+        return new Promise(function (resolve, reject) {
           return _this2.test_function(function (error) {
             clearTimeout(timeout);
             if (error) {
