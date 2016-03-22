@@ -9,6 +9,7 @@
 
     <script type="application/javascript">
       var test_suite = new rosehip.Test()
+      var reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'), test_suite)
 
       // A carrot
       var carrot = {
@@ -42,7 +43,6 @@
         })
       })
 
-      var reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'), test_suite)
       setTimeout(function(){
         test_suite.run()
       }, 1000)

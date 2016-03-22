@@ -36,5 +36,5 @@ test_suite.describe("A carrot", function(test){
 
 var reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'), test_suite)
 setTimeout(function(){
-  test_suite.run()
+  test_suite.run() // delay on purpose to simulate tests running
 }, 1000)

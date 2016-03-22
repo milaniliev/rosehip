@@ -33,6 +33,10 @@ class TestDisplay {
       test.nested_tests.forEach((nested_test) => {
         let display = new TestDisplay(nested_test, this.element)
       })
+      
+      test.onTestAdded = function(new_test){
+        let display = new TestDisplay(new_test, this.element)
+      }.bind(this)
     }
   }
 }

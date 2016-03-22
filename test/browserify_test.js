@@ -5806,6 +5806,10 @@ var TestDisplay = function TestDisplay(test, container_element) {
     test.nested_tests.forEach(function (nested_test) {
       var display = new TestDisplay(nested_test, _this.element);
     });
+
+    test.onTestAdded = (function (new_test) {
+      var display = new TestDisplay(new_test, this.element);
+    }).bind(this);
   }
 };
 
@@ -5824,11 +5828,15 @@ var css = ".rosehip {\n  padding: 10px;\n  border: 1px solid #DDD;\n  box-shadow
 },{"./../node_modules/cssify":5}],10:[function(_dereq_,module,exports){
 'use strict';
 
-module.exports = {
+var Rosehip = {
   ConsoleReporter: _dereq_('./reporters/console_reporter.js'),
   WebReporter: _dereq_('./reporters/web_reporter.js'),
   Test: _dereq_('./test.js')
 };
+
+Rosehip.TestSuite = Rosehip.Test;
+
+module.exports = Rosehip;
 
 },{"./reporters/console_reporter.js":7,"./reporters/web_reporter.js":8,"./test.js":11}],11:[function(_dereq_,module,exports){
 'use strict';
@@ -5899,6 +5907,10 @@ module.exports = (function (_EventEmitter) {
       });
 
       this.nested_tests.push(nested_test);
+
+      if (this.onTestAdded) {
+        this.onTestAdded(nested_test);
+      }
       return nested_test;
     }
   }, {
@@ -5947,7 +5959,7 @@ module.exports = (function (_EventEmitter) {
       this.emit('start');
       this.test_promise = Promise['try'](function () {
         var timeout = setTimeout(function () {
-          throw new Error('Async function is not done after ' + _this2.async_timeout + 'ms.');
+          throw new Error('Async function is not done() after ' + _this2.async_timeout + 'ms.');
         }, _this2.async_timeout);
         return new Promise(function (reject, resolve) {
           return _this2.test_function(function (error) {
@@ -6066,7 +6078,7 @@ test_suite.describe("A carrot", function(test){
 
 var reporter = new rosehip.WebReporter(document.getElementById('rosehip_report'), test_suite)
 setTimeout(function(){
-  test_suite.run()
+  test_suite.run() // delay on purpose to simulate tests running
 }, 1000)
 
 },{"../../":1}]},{},[2]);

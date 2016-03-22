@@ -40,6 +40,10 @@ module.exports = class Test extends EventEmitter {
     })
 
     this.nested_tests.push(nested_test)
+    
+    if (this.onTestAdded) {
+      this.onTestAdded(nested_test)
+    }
     return nested_test
   }
 
@@ -102,7 +106,7 @@ module.exports = class Test extends EventEmitter {
     this.emit('start')
     this.test_promise = Promise.try(() => {
       let timeout = setTimeout(() => {
-        throw new Error(`Async function is not done after ${this.async_timeout}ms.`)
+        throw new Error(`Async function is not done() after ${this.async_timeout}ms.`)
       }, this.async_timeout)
       return new Promise((reject, resolve) => {
         return this.test_function((error) => {

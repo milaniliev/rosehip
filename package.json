@@ -1,9 +1,12 @@
 {
   "name": "rosehip",
   "description": "A simple, no-magic JavaScript unit testing library for browsers and Node.JS.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "rosehip.js",
-  "repository": "https://github.com/milaniliev/rosehip.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milaniliev/rosehip.git"
+  },
   "author": "Milan Iliev",
   "license": "MIT License",
   "keywords": [

@@ -35,8 +35,8 @@ test_suite.describe("A carrot", function(test){
 
     test.it("un-explodes after 15 seconds", function(done){
       carrot.wind(function(){
-          assert.equal(carrot.exploded, false, "carrot is still exploded")
-          done()
+        assert.equal(carrot.exploded, false, "carrot is still exploded")
+        done()
       })
     })
   })

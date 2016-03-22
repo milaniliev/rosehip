@@ -13,4 +13,4 @@ test: build test/browserify_test.js
 	# open test/browserify.html
 	node test/node.js
 
-.PHONY: test
+.PHONY: test build
