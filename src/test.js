@@ -118,7 +118,7 @@ module.exports = class Test extends EventEmitter {
     }).then(() => {
       this.pass()
     }).catch((error) => {
-      fail(error)
+      this.fail(error)
     })
   }
 

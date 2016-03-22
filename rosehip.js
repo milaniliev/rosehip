@@ -5975,7 +5975,7 @@ module.exports = (function (_EventEmitter) {
       }).then(function () {
         _this2.pass();
       })['catch'](function (error) {
-        fail(error);
+        _this2.fail(error);
       });
     }
   }, {
