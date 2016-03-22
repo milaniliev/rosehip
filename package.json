@@ -1,7 +1,7 @@
 {
   "name": "rosehip",
   "description": "A simple, no-magic JavaScript unit testing library for browsers and Node.JS.",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "main": "rosehip.js",
   "repository": {
     "type": "git",
