@@ -5917,6 +5917,9 @@ module.exports = (function (_EventEmitter) {
     key: 'run',
     value: function run() {
       if (this.runnable) {
+        if (!this.test_function) {
+          return;
+        }
         if (this.test_function.length > 0) {
           return this.run_async_test_function();
         } else {
@@ -6065,6 +6068,8 @@ test_suite.describe("A carrot", function(test){
   test.it("is orange", function(){
     expect(carrot.color).to.equal("orange")
   })
+  
+  test.it("is a root vegetable") // pending test
 
   test.describe("that explodes", function(test){
     test.it("explodes after 10 seconds", function(done){
